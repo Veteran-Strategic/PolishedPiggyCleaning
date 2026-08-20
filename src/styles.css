@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0b0b0d;
+  --color-surface: #16141a;
+  --color-fg: #f7f2f6;
+  --color-muted: #b7a8b4;
+  --color-primary: #ff5cb0;
+  --color-primary-fg: #0b0b0d;
+  --color-accent: #ff8cc8;
+  --color-border: #2e2733;
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --radius: 0.9rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  a {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .hero-glow {
+    background: radial-gradient(
+      ellipse at top,
+      rgb(255 92 176 / 0.18),
+      transparent 55%
+    );
+  }
+
+  .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .site-footer {
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+  }
+
+  .input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    padding: 0.75rem 0.9rem;
+    color: var(--color-fg);
+    font-size: 1rem;
+    outline: none;
+  }
+
+  .input:focus {
+    border-color: var(--color-primary);
+  }
+}
