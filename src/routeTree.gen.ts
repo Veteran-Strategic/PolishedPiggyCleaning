@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ApiCalendarFeedRouteImport } from './routes/api/calendar-feed'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCalendarFeedRoute = ApiCalendarFeedRouteImport.update({
+  id: '/api/calendar-feed',
+  path: '/api/calendar-feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/book': typeof BookRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/api/calendar-feed': typeof ApiCalendarFeedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/book': typeof BookRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/api/calendar-feed': typeof ApiCalendarFeedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,23 @@ export interface FileRoutesById {
   '/book': typeof BookRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/api/calendar-feed': typeof ApiCalendarFeedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/book' | '/inbox' | '/login' | '/api/auth/$'
+  fullPaths:
+    '/' | '/book' | '/inbox' | '/login' | '/api/calendar-feed' | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/book' | '/inbox' | '/login' | '/api/auth/$'
-  id: '__root__' | '/' | '/book' | '/inbox' | '/login' | '/api/auth/$'
+  to: '/' | '/book' | '/inbox' | '/login' | '/api/calendar-feed' | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/book'
+    | '/inbox'
+    | '/login'
+    | '/api/calendar-feed'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +93,7 @@ export interface RootRouteChildren {
   BookRoute: typeof BookRoute
   InboxRoute: typeof InboxRoute
   LoginRoute: typeof LoginRoute
+  ApiCalendarFeedRoute: typeof ApiCalendarFeedRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -109,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/calendar-feed': {
+      id: '/api/calendar-feed'
+      path: '/api/calendar-feed'
+      fullPath: '/api/calendar-feed'
+      preLoaderRoute: typeof ApiCalendarFeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookRoute: BookRoute,
   InboxRoute: InboxRoute,
   LoginRoute: LoginRoute,
+  ApiCalendarFeedRoute: ApiCalendarFeedRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { listInquiries, type InquiryRow } from "@/lib/inquiries";
+import { formatAppointment } from "@/lib/schedule";
 
 export const Route = createFileRoute("/inbox")({ component: Inbox });
 
@@ -28,16 +29,19 @@ function Inbox() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="font-display text-3xl font-medium">Booking inbox</h1>
+      <h1 className="font-display text-3xl font-medium uppercase tracking-wide">
+        Calendar
+      </h1>
       <p className="mt-2 text-sm text-muted">
-        New driveway requests land here.
+        Booked driveway visits. Confirm, take payment, then drive. New visits
+        also go on your Google Calendar.
       </p>
       <div className="mt-8 space-y-4">
         {rows === null ? (
           <p className="text-sm text-muted">Loading…</p>
         ) : rows.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-border bg-surface p-8 text-sm text-muted">
-            No inquiries yet. The book form on the site feeds this list.
+            No visits on the calendar yet.
           </p>
         ) : (
           rows.map((row) => (
@@ -47,9 +51,11 @@ function Inbox() {
             >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 className="font-semibold">{row.name}</h2>
-                <time className="text-xs text-muted">
-                  {new Date(row.created_at).toLocaleString()}
-                </time>
+                <p className="text-sm font-medium text-primary">
+                  {row.scheduled_for
+                    ? formatAppointment(new Date(row.scheduled_for))
+                    : "No time picked"}
+                </p>
               </div>
               <p className="mt-1 text-sm text-muted">
                 {row.phone} · {row.email}

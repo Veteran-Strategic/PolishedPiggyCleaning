@@ -1,22 +1,68 @@
 import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
 import {
-  inquirySchema,
+  detailsSchema,
+  listWindowCounts,
   submitInquiry,
-  type InquiryInput,
+  type DetailsInput,
 } from "@/lib/inquiries";
+import {
+  dayKey,
+  formatAppointment,
+  formatDayShort,
+  openDays,
+  slotsForDay,
+} from "@/lib/schedule";
 
 export const Route = createFileRoute("/book")({ component: Book });
 
 function Book() {
-  const [done, setDone] = useState(false);
+  const [counts, setCounts] = useState<Record<string, number>>({});
+  const [dayIso, setDayIso] = useState("");
+  const [slotIso, setSlotIso] = useState<string | null>(null);
+  const [doneAt, setDoneAt] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const form = useForm<InquiryInput>({
-    resolver: zodResolver(inquirySchema),
+  const days = useMemo(() => {
+    return openDays().filter((day) =>
+      slotsForDay(day, counts).some((slot) => !slot.full && !slot.past),
+    );
+  }, [counts]);
+
+  const selectedDay = useMemo(
+    () => days.find((d) => d.toISOString() === dayIso) ?? days[0],
+    [days, dayIso],
+  );
+  const slots = useMemo(
+    () => (selectedDay ? slotsForDay(selectedDay, counts) : []),
+    [selectedDay, counts],
+  );
+
+  useEffect(() => {
+    listWindowCounts()
+      .then(setCounts)
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    if (!days.length) return;
+    if (!days.some((d) => d.toISOString() === dayIso)) {
+      setDayIso(days[0].toISOString());
+      setSlotIso(null);
+    }
+  }, [days, dayIso]);
+
+  useEffect(() => {
+    if (slotIso && slots.some((s) => s.iso === slotIso && (s.full || s.past))) {
+      setSlotIso(null);
+    }
+  }, [slotIso, slots]);
+
+  const form = useForm<DetailsInput>({
+    resolver: zodResolver(detailsSchema),
     defaultValues: {
       name: "",
       phone: "",
@@ -27,99 +73,173 @@ function Book() {
     },
   });
 
-  async function onSubmit(values: InquiryInput) {
+  async function onSubmit(values: DetailsInput) {
     setError(null);
+    if (!slotIso) {
+      setError("Pick a day and a window first.");
+      return;
+    }
     try {
-      await submitInquiry({ data: values });
-      setDone(true);
-    } catch {
-      setError("Couldn’t send that just now. Try again in a minute.");
+      const result = await submitInquiry({
+        data: { ...values, scheduledFor: slotIso },
+      });
+      setDoneAt(result.scheduledFor);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Couldn’t hold that window. Try another.",
+      );
+      const next = await listWindowCounts().catch(() => ({} as Record<string, number>));
+      setCounts(next);
     }
   }
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2">
-      <div>
+    <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
+      <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-primary">
           Book a mobile visit
         </p>
         <h1 className="mt-3 font-display text-3xl font-semibold uppercase tracking-wide sm:text-4xl">
-          We’ll come to your driveway.
+          Pick a window. We’ll come to you.
         </h1>
-        <p className="mt-4 max-w-md leading-relaxed text-muted">
-          Share a few details and we’ll confirm a time. Most headlight
-          restorations take about 15 minutes.
+        <p className="mt-4 leading-relaxed text-muted">
+          Most visits take about 15 minutes. Choose a two-hour arrival window
+          and we’ll get there sometime in that range. We’ll text to confirm, and
+          payment holds the visit before we drive over.
         </p>
-        <img
-          src="/photos/dusk.jpg"
-          alt="Restored headlight glowing at dusk"
-          className="mt-8 hidden rounded-2xl object-cover lg:block"
-        />
       </div>
 
-      {done ? (
-        <div className="rounded-2xl border border-border bg-surface p-8">
+      {doneAt ? (
+        <div className="mt-10 max-w-lg rounded-2xl border border-border bg-surface p-8">
           <div className="grid size-12 place-items-center rounded-full bg-primary text-primary-fg">
             <Check className="size-6" />
           </div>
           <h2 className="mt-5 font-display text-2xl uppercase tracking-wide">
-            Got it.
+            You’re on the calendar.
           </h2>
           <p className="mt-3 leading-relaxed text-muted">
-            We’ll reach out to lock a time. Keep an eye on your phone.
+            {formatAppointment(new Date(doneAt))}. Watch your phone. We’ll
+            confirm and take payment before we head your way.
           </p>
         </div>
       ) : (
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+          className="mt-10 grid min-w-0 gap-8 lg:grid-cols-2"
         >
-          <Field label="Name" error={form.formState.errors.name?.message}>
-            <input
-              className="input"
-              autoComplete="name"
-              {...form.register("name")}
-            />
-          </Field>
-          <Field label="Phone" error={form.formState.errors.phone?.message}>
-            <input
-              className="input"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              {...form.register("phone")}
-            />
-          </Field>
-          <Field label="Email" error={form.formState.errors.email?.message}>
-            <input
-              className="input"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              {...form.register("email")}
-            />
-          </Field>
-          <Field label="Vehicle (year / make / model)">
-            <input className="input" {...form.register("vehicle")} />
-          </Field>
-          <Field label="City or neighborhood">
-            <input className="input" {...form.register("neighborhood")} />
-          </Field>
-          <Field label="Anything we should know?">
-            <textarea
-              className="input min-h-24"
-              rows={3}
-              {...form.register("notes")}
-            />
-          </Field>
-          {error ? <p className="text-sm text-primary">{error}</p> : null}
-          <button
-            type="submit"
-            disabled={form.formState.isSubmitting}
-            className="h-12 w-full rounded-full bg-primary text-sm font-semibold text-primary-fg hover:bg-accent disabled:opacity-60"
-          >
-            {form.formState.isSubmitting ? "Sending…" : "Schedule a visit"}
-          </button>
+          <section className="min-w-0 overflow-hidden rounded-2xl border border-border bg-surface p-4 sm:p-6">
+            <h2 className="font-display text-lg uppercase tracking-wide">
+              1. Choose a day
+            </h2>
+            <div className="day-scroller mt-4">
+              {days.map((day) => {
+                const meta = formatDayShort(day);
+                const active = selectedDay ? dayKey(day) === dayKey(selectedDay) : false;
+                return (
+                  <button
+                    key={meta.key}
+                    type="button"
+                    className="day-chip"
+                    data-active={active}
+                    onClick={() => {
+                      setDayIso(day.toISOString());
+                      setSlotIso(null);
+                    }}
+                  >
+                    <span className="block text-xs uppercase tracking-wide">
+                      {meta.weekday}
+                    </span>
+                    <span className="mt-0.5 block">{meta.monthDay}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <h2 className="mt-8 font-display text-lg uppercase tracking-wide">
+              2. Choose a window
+            </h2>
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {slots.map((slot) => (
+                <button
+                  key={slot.iso}
+                  type="button"
+                  className="time-chip"
+                  data-active={slotIso === slot.iso}
+                  disabled={slot.full || slot.past}
+                  onClick={() => setSlotIso(slot.iso)}
+                >
+                  {slot.full ? "Full" : slot.label}
+                </button>
+              ))}
+            </div>
+            {slots.every((s) => s.full || s.past) ? (
+              <p className="mt-3 text-sm text-muted">
+                No windows left this day. Try another.
+              </p>
+            ) : (
+              <p className="mt-3 text-sm text-muted">
+                We’ll arrive sometime in the window you pick. Closed Sundays.
+                Eastern time.
+              </p>
+            )}
+          </section>
+
+          <section className="min-w-0 space-y-4 rounded-2xl border border-border bg-surface p-4 sm:p-6">
+            <h2 className="font-display text-lg uppercase tracking-wide">
+              3. Your details
+            </h2>
+            {slotIso ? (
+              <p className="text-sm text-primary">
+                {formatAppointment(new Date(slotIso))}
+              </p>
+            ) : (
+              <p className="text-sm text-muted">Pick a day and window first.</p>
+            )}
+            <Field label="Name" error={form.formState.errors.name?.message}>
+              <input className="input" autoComplete="name" {...form.register("name")} />
+            </Field>
+            <Field label="Phone" error={form.formState.errors.phone?.message}>
+              <input
+                className="input"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                {...form.register("phone")}
+              />
+            </Field>
+            <Field label="Email" error={form.formState.errors.email?.message}>
+              <input
+                className="input"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                {...form.register("email")}
+              />
+            </Field>
+            <Field label="Vehicle (year / make / model)">
+              <input className="input" {...form.register("vehicle")} />
+            </Field>
+            <Field
+              label="City or neighborhood"
+              error={form.formState.errors.neighborhood?.message}
+            >
+              <input className="input" {...form.register("neighborhood")} />
+            </Field>
+            {error ? <p className="text-sm text-primary">{error}</p> : null}
+            <button
+              type="submit"
+              disabled={form.formState.isSubmitting || !slotIso}
+              className="h-12 w-full rounded-full bg-primary text-sm font-semibold text-primary-fg hover:bg-accent disabled:opacity-60"
+            >
+              {form.formState.isSubmitting ? "Holding…" : "Hold this window"}
+            </button>
+            <p className="text-xs leading-relaxed text-muted">
+              No charge on this screen. We’ll take payment when we confirm,
+              before we leave for your driveway.
+            </p>
+          </section>
         </form>
       )}
     </main>
