@@ -65,6 +65,14 @@ const OID_DATE = 1082;
 const OID_INTERVAL = 1186;
 const identity = (v: string) => v;
 
+function isCloudflareWorker() {
+  return (
+    (typeof navigator !== "undefined" &&
+      /Cloudflare-Workers/i.test(navigator.userAgent ?? "")) ||
+    (typeof process !== "undefined" && Boolean(process.env.CF_PAGES))
+  );
+}
+
 type Run = <T>(text: string, params: unknown[]) => Promise<T[]>;
 
 /** Wrap a query runner in the tagged-template + `.query()` `Sql` surface. */
@@ -110,6 +118,9 @@ async function createPgliteSql(): Promise<Sql> {
   globalRef.__pgliteInstance__ ??= (async () => {
     const { PGlite } = await import("@electric-sql/pglite");
     const pg = new PGlite({
+      // Cloudflare Workers have no filesystem. memory:// keeps bootstrap from
+      // throwing "Invalid URL string" and taking the whole site down.
+      ...(isCloudflareWorker() ? { dataDir: "memory://" } : {}),
       parsers: {
         [OID_INT8]: Number,
         [OID_DATE]: identity,
@@ -233,6 +244,6 @@ if (typeof window === "undefined" && dbSource === "pglite") {
   globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
     globalBoot.__pgBootstrapPromise__ = undefined;
     console.error("[db] PGLite bootstrap failed:", err);
-    throw err;
+    // Swallow: an unhandled rejection here is the Cloudflare Pages 500.
   });
 }
