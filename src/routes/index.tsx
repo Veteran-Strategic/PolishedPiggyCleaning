@@ -132,20 +132,22 @@ function Home() {
       </section>
 
       <section className="border-t border-border">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl border border-border bg-black">
-            <video
-              className="aspect-square w-full bg-black object-cover"
-              controls
-              playsInline
-              preload="metadata"
-              poster="/videos/testimonial-poster.jpg"
-            >
-              <source src="/videos/testimonial.mp4" type="video/mp4" />
-              Your browser can’t play this video.
-            </video>
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 py-16 sm:px-6 lg:flex-row lg:items-center lg:gap-14">
+          <div className="w-full max-w-[320px] shrink-0 sm:max-w-[360px]">
+            <div className="overflow-hidden rounded-[1.75rem] border border-border bg-black shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
+              <video
+                className="block aspect-[9/16] h-auto max-h-[70vh] w-full bg-black object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/videos/testimonial-poster.jpg"
+              >
+                <source src="/videos/testimonial.mp4" type="video/mp4" />
+                Your browser can’t play this video.
+              </video>
+            </div>
           </div>
-          <div>
+          <div className="w-full max-w-xl text-center lg:text-left">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
               From the neighborhood
             </p>
