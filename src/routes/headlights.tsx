@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, Clock, MapPin, ShieldCheck } from "lucide-react";
+import {
+  HEADLIGHT_DURATION,
+  HEADLIGHT_PRICE_LABEL,
+  HOURS_DISPLAY,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+} from "@/lib/business";
 
 export const Route = createFileRoute("/headlights")({
   component: Headlights,
@@ -10,7 +17,7 @@ export const Route = createFileRoute("/headlights")({
       {
         name: "description",
         content:
-          "Mobile headlight restoration in Greater Cincinnati. Cloudy, yellowed headlights made crystal clear again, right in your driveway.",
+          `Mobile headlight restoration in Greater Cincinnati. Both headlights ${HEADLIGHT_PRICE_LABEL}, ${HEADLIGHT_DURATION}, right in your driveway.`,
       },
     ],
   }),
@@ -24,7 +31,7 @@ function Headlights() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:py-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Mobile · Greater Cincinnati
+              Mobile · Greater Cincinnati · {HEADLIGHT_PRICE_LABEL} a pair
             </p>
             <h1 className="mt-4 font-display text-3xl font-semibold uppercase leading-[1.08] tracking-wide text-fg sm:text-5xl lg:text-6xl">
               Cloudy headlights? We’ll make them clear again.
@@ -43,14 +50,15 @@ function Headlights() {
                 <ArrowRight className="size-4" />
               </Link>
               <a
-                href="#results"
+                href={PHONE_HREF}
                 className="inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-semibold text-fg hover:border-primary/40 sm:w-auto"
               >
-                See the difference
+                Call {PHONE_DISPLAY}
               </a>
             </div>
             <p className="mt-5 text-sm text-muted">
-              Most visits take about 15 minutes.
+              {HEADLIGHT_PRICE_LABEL} for both lights. Most visits take{" "}
+              {HEADLIGHT_DURATION}. {HOURS_DISPLAY}.
             </p>
           </div>
           <div className="relative">
@@ -72,13 +80,13 @@ function Headlights() {
           />
           <Fact
             icon={<Clock className="size-5" />}
-            title="About 15 minutes"
-            body="You’re home the whole time. No shop drop-off."
+            title={`Most visits take ${HEADLIGHT_DURATION}`}
+            body="You can stay home or head out. We just need the car and a parking spot."
           />
           <Fact
-            icon={<Sparkles className="size-5" />}
-            title="Crystal clear again"
-            body="You’ll notice it at night first. Then you’ll notice how much newer the car looks."
+            icon={<ShieldCheck className="size-5" />}
+            title={`${HEADLIGHT_PRICE_LABEL} a pair. Insured.`}
+            body="Both headlights, matched and sealed. Veteran owned."
           />
         </div>
       </section>
@@ -104,9 +112,9 @@ function Headlights() {
             </p>
             <ul className="mt-6 space-y-3 text-sm">
               {[
-                "We come to your house",
-                "Both headlights, matched",
-                "Results you can see, day and night",
+                `${HEADLIGHT_PRICE_LABEL} for both headlights`,
+                `Most visits take ${HEADLIGHT_DURATION}`,
+                "We come to your house. Insured.",
               ].map((item) => (
                 <li key={item} className="flex gap-3">
                   <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
@@ -130,14 +138,15 @@ function Headlights() {
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="max-w-xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              The Polished Piggy
+              Jeremy · Owner
             </p>
             <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
               Friendly help. Serious results.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
-              We show up where you park, keep things straightforward, and aim
-              for results you can actually see.
+              I’m Jeremy, a military veteran and Florida transplant who loves
+              Cincinnati. I show up where you park, keep things straightforward,
+              and aim for results you can actually see.
             </p>
           </div>
         </div>

@@ -1,5 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import {
+  HEADLIGHT_DURATION,
+  HEADLIGHT_PRICE_LABEL,
+  HOURS_DISPLAY,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+} from "@/lib/business";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -9,7 +16,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Mobile auto detailing and headlight restoration in Greater Cincinnati. We come to you. Friendly help. Serious results.",
+          `Mobile auto detailing and headlight restoration in Greater Cincinnati. Both headlights ${HEADLIGHT_PRICE_LABEL}. We come to you. Friendly help. Serious results.`,
       },
     ],
   }),
@@ -32,6 +39,10 @@ function Home() {
               We come to your driveway. Full auto detailing and headlight
               restoration. Friendly help. Serious results.
             </p>
+            <p className="mt-4 text-sm font-semibold text-fg">
+              Both headlights {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
+              {HEADLIGHT_DURATION}. Insured.
+            </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 to="/headlights"
@@ -48,6 +59,12 @@ function Home() {
                 Book a detail
               </Link>
             </div>
+            <p className="mt-5 text-sm text-muted">
+              <a href={PHONE_HREF} className="font-semibold text-fg hover:text-primary">
+                {PHONE_DISPLAY}
+              </a>
+              {" · "}{HOURS_DISPLAY}
+            </p>
           </div>
           <div className="relative">
             <img
@@ -74,11 +91,11 @@ function Home() {
               Headlight restoration
             </p>
             <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
-              Cloudy to clear. About 15 minutes.
+              Cloudy to clear. {HEADLIGHT_PRICE_LABEL} a pair.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Both lights, matched, sealed, in your driveway. This is the offer
-              we run ads on.
+              Both lights, matched, sealed, in your driveway. Most visits take{" "}
+              {HEADLIGHT_DURATION}. This is the offer we run ads on.
             </p>
             <p className="mt-4 text-sm font-semibold text-primary group-hover:underline">
               See headlights →
@@ -116,16 +133,17 @@ function Home() {
 
       <section className="border-t border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="max-w-xl">
+          <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              The Polished Piggy
+              Jeremy · Owner
             </p>
             <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
               Friendly help. Serious results.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
-              100% veteran owned. Mobile across Greater Cincinnati and Northern
-              Kentucky. We show up where you park.
+              I’m Jeremy, a military veteran who landed in Greater Cincinnati
+              by way of Florida and stayed because I love it here. I show up
+              where you park. 100% veteran owned. Insured.
             </p>
           </div>
         </div>
