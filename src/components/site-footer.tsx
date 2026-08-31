@@ -1,6 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Logo } from "@/components/logo";
+import {
+  HEADLIGHT_PRICE_LABEL,
+  HOURS_DISPLAY,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+} from "@/lib/business";
 
 const socials = [
   {
@@ -55,6 +61,15 @@ export function SiteFooter() {
           </p>
           <p className="mt-3 text-sm font-semibold text-primary">
             100% veteran owned
+          </p>
+          <p className="mt-4 text-sm">
+            <a href={PHONE_HREF} className="font-semibold text-fg hover:text-primary">
+              {PHONE_DISPLAY}
+            </a>
+          </p>
+          <p className="mt-1 text-sm text-muted">{HOURS_DISPLAY}</p>
+          <p className="mt-1 text-sm text-muted">
+            Headlights {HEADLIGHT_PRICE_LABEL} a pair. Insured.
           </p>
         </div>
         <div className="grid gap-1 text-sm text-muted">
