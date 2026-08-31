@@ -5,8 +5,6 @@ import {
   HEADLIGHT_DURATION,
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
-  PHONE_DISPLAY,
-  PHONE_HREF,
 } from "@/lib/business";
 
 export const Route = createFileRoute("/headlights")({
@@ -40,7 +38,7 @@ function Headlights() {
               We restore yellowed, hazy headlights right in your driveway.
               Brighter at night. A car that looks cared for again.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8">
               <Link
                 to="/book"
                 search={{ service: "headlights" }}
@@ -49,12 +47,6 @@ function Headlights() {
                 Schedule a visit
                 <ArrowRight className="size-4" />
               </Link>
-              <a
-                href={PHONE_HREF}
-                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-semibold text-fg hover:border-primary/40 sm:w-auto"
-              >
-                Call {PHONE_DISPLAY}
-              </a>
             </div>
             <p className="mt-5 text-sm text-muted">
               {HEADLIGHT_PRICE_LABEL} for both lights. Most visits take{" "}
