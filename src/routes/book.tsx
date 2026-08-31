@@ -87,7 +87,7 @@ function Book() {
   async function onSubmit(values: DetailsInput) {
     setError(null);
     if (!slotIso) {
-      setError("Pick a day and a window first.");
+      setError("Pick a day and a time first.");
       return;
     }
     const label =
@@ -106,7 +106,7 @@ function Book() {
       setError(
         err instanceof Error
           ? err.message
-          : "Couldn’t hold that window. Try another.",
+          : "Couldn’t hold that time. Try another.",
       );
       const next = await listWindowCounts().catch(() => ({} as Record<string, number>));
       setCounts(next);
@@ -122,8 +122,8 @@ function Book() {
 
   const blurb =
     service === "headlights"
-      ? "Most headlight visits take about 15 minutes. Choose a two-hour arrival window and we’ll get there sometime in that range. We’ll text to confirm, and payment holds the visit before we drive over."
-      : "Choose a two-hour arrival window and we’ll get there sometime in that range. We’ll text to confirm, and payment holds the visit before we drive over.";
+      ? "The work is about 15 minutes. You pick an hour so travel to the next driveway is covered. We’ll text to confirm, and payment holds the visit before we drive over."
+      : "You pick an hour. We’ll text to confirm, and payment holds the visit before we drive over.";
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -132,7 +132,7 @@ function Book() {
           {eyebrow}
         </p>
         <h1 className="mt-3 font-display text-3xl font-semibold uppercase tracking-wide sm:text-4xl">
-          Pick a window. We’ll come to you.
+          Pick a time. We’ll come to you.
         </h1>
         <p className="mt-4 leading-relaxed text-muted">{blurb}</p>
       </div>
@@ -184,9 +184,9 @@ function Book() {
             </div>
 
             <h2 className="mt-8 font-display text-lg uppercase tracking-wide">
-              2. Choose a window
+              2. Choose a time
             </h2>
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {slots.map((slot) => (
                 <button
                   key={slot.iso}
@@ -196,18 +196,18 @@ function Book() {
                   disabled={slot.full || slot.past}
                   onClick={() => setSlotIso(slot.iso)}
                 >
-                  {slot.full ? "Full" : slot.label}
+                  {slot.full ? "Booked" : slot.label}
                 </button>
               ))}
             </div>
             {slots.every((s) => s.full || s.past) ? (
               <p className="mt-3 text-sm text-muted">
-                No windows left this day. Try another.
+                No times left this day. Try another.
               </p>
             ) : (
               <p className="mt-3 text-sm text-muted">
-                We’ll arrive sometime in the window you pick. Closed Sundays.
-                Eastern time.
+                Monday–Friday, 9:00 AM–4:00 PM. Each booking holds the full
+                hour. Closed weekends. Eastern time.
               </p>
             )}
           </section>
@@ -221,7 +221,7 @@ function Book() {
                 {formatAppointment(new Date(slotIso))}
               </p>
             ) : (
-              <p className="text-sm text-muted">Pick a day and window first.</p>
+              <p className="text-sm text-muted">Pick a day and time first.</p>
             )}
             <Field label="Name" error={form.formState.errors.name?.message}>
               <input className="input" autoComplete="name" {...form.register("name")} />
@@ -259,7 +259,7 @@ function Book() {
               disabled={form.formState.isSubmitting || !slotIso}
               className="h-12 w-full rounded-full bg-primary text-sm font-semibold text-primary-fg hover:bg-accent disabled:opacity-60"
             >
-              {form.formState.isSubmitting ? "Holding…" : "Hold this window"}
+              {form.formState.isSubmitting ? "Holding…" : "Hold this time"}
             </button>
             <p className="text-xs leading-relaxed text-muted">
               No charge on this screen. We’ll take payment when we confirm,

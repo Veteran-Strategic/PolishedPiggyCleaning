@@ -1,14 +1,18 @@
 export const TIME_ZONE = "America/New_York";
 export const WINDOW_HOURS = [
-  { start: 9, end: 11 },
-  { start: 11, end: 13 },
-  { start: 13, end: 15 },
-  { start: 15, end: 17 },
+  { start: 9, end: 10 },
+  { start: 10, end: 11 },
+  { start: 11, end: 12 },
+  { start: 12, end: 13 },
+  { start: 13, end: 14 },
+  { start: 14, end: 15 },
+  { start: 15, end: 16 },
+  { start: 16, end: 17 },
 ] as const;
-export const WINDOW_CAPACITY = 3;
+export const WINDOW_CAPACITY = 1;
 export const DAYS_AHEAD = 14;
 export const LEAD_MINUTES = 180;
-export const CLOSED_WEEKDAYS = new Set([0]);
+export const CLOSED_WEEKDAYS = new Set([0, 6]);
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
@@ -91,17 +95,11 @@ export function openDays(from = new Date(), count = DAYS_AHEAD) {
 function clockLabel(hour: number) {
   const suffix = hour >= 12 ? "PM" : "AM";
   const h = hour % 12 === 0 ? 12 : hour % 12;
-  return `${h} ${suffix}`;
+  return `${h}:00 ${suffix}`;
 }
 
 export function formatWindowLabel(startHour: number, endHour: number) {
-  const sameHalf =
-    (startHour < 12 && endHour <= 12) || (startHour >= 12 && endHour > 12);
-  if (sameHalf) {
-    const start = startHour % 12 === 0 ? 12 : startHour % 12;
-    return `${start} to ${clockLabel(endHour)}`;
-  }
-  return `${clockLabel(startHour)} to ${clockLabel(endHour)}`;
+  return clockLabel(startHour);
 }
 
 export function slotsForDay(
@@ -158,7 +156,7 @@ export function formatDayShort(date: Date) {
 export function windowEnd(start: Date) {
   const p = tzParts(start);
   const window = WINDOW_HOURS.find((w) => w.start === p.hour);
-  const endHour = window?.end ?? p.hour + 2;
+  const endHour = window?.end ?? p.hour + 1;
   return zonedDate(p.year, p.month, p.day, endHour);
 }
 
@@ -174,16 +172,12 @@ export function rfc3339InZone(date: Date) {
 
 export function formatAppointment(date: Date) {
   const p = tzParts(date);
-  const window = WINDOW_HOURS.find((w) => w.start === p.hour);
-  const range = window
-    ? formatWindowLabel(window.start, window.end)
-    : formatWindowLabel(p.hour, p.hour + 2);
+  const time = clockLabel(p.hour);
   const day = new Intl.DateTimeFormat("en-US", {
     timeZone: TIME_ZONE,
     weekday: "long",
     month: "long",
     day: "numeric",
   }).format(date);
-  return `${day}, ${range}`;
+  return `${day} at ${time}`;
 }
-
