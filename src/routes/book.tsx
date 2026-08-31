@@ -11,6 +11,13 @@ import {
   type DetailsInput,
 } from "@/lib/inquiries";
 import {
+  HEADLIGHT_DURATION,
+  HEADLIGHT_PRICE_LABEL,
+  HOURS_DISPLAY,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+} from "@/lib/business";
+import {
   dayKey,
   formatAppointment,
   formatDayShort,
@@ -92,7 +99,7 @@ function Book() {
     }
     const label =
       service === "headlights"
-        ? "Service: Headlight restoration"
+        ? `Service: Headlight restoration (${HEADLIGHT_PRICE_LABEL} both lights)`
         : service === "detailing"
           ? "Service: Auto detailing"
           : "";
@@ -122,8 +129,8 @@ function Book() {
 
   const blurb =
     service === "headlights"
-      ? "The work is about 15 minutes. You pick an hour so travel to the next driveway is covered. We’ll text to confirm, and payment holds the visit before we drive over."
-      : "You pick an hour. We’ll text to confirm, and payment holds the visit before we drive over.";
+      ? `Both headlights ${HEADLIGHT_PRICE_LABEL}. Most visits take ${HEADLIGHT_DURATION}. You pick an hour so travel is covered. We’ll text to confirm. Payment holds the visit before we drive over.`
+      : "You pick an hour. We’ll text to confirm. Payment holds the visit before we drive over.";
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -135,7 +142,27 @@ function Book() {
           Pick a time. We’ll come to you.
         </h1>
         <p className="mt-4 leading-relaxed text-muted">{blurb}</p>
+        <p className="mt-3 text-sm text-muted">
+          <a href={PHONE_HREF} className="font-semibold text-fg hover:text-primary">
+            {PHONE_DISPLAY}
+          </a>
+          {" · "}{HOURS_DISPLAY}
+        </p>
       </div>
+
+      {service === "headlights" ? (
+        <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface p-5 text-sm leading-relaxed">
+          <p className="font-semibold text-fg">
+            Headlight restoration · {HEADLIGHT_PRICE_LABEL} both lights
+          </p>
+          <p className="mt-2 text-muted">
+            Matched and sealed in your driveway. Most visits take{" "}
+            {HEADLIGHT_DURATION}. Insured. No charge on this screen — we take
+            payment when we confirm, before we leave for your driveway. Weather
+            cancels get moved, not billed.
+          </p>
+        </div>
+      ) : null}
 
       {doneAt ? (
         <div className="mt-10 max-w-lg rounded-2xl border border-border bg-surface p-8">
@@ -206,8 +233,8 @@ function Book() {
               </p>
             ) : (
               <p className="mt-3 text-sm text-muted">
-                Monday–Friday, 9:00 AM–4:00 PM. Each booking holds the full
-                hour. Closed weekends. Eastern time.
+                Monday–Saturday, 9:00 AM–6:00 PM. Each booking holds the full
+                hour. Closed Sundays. Eastern time.
               </p>
             )}
           </section>
@@ -262,8 +289,9 @@ function Book() {
               {form.formState.isSubmitting ? "Holding…" : "Hold this time"}
             </button>
             <p className="text-xs leading-relaxed text-muted">
-              No charge on this screen. We’ll take payment when we confirm,
-              before we leave for your driveway.
+              {service === "headlights"
+                ? `${HEADLIGHT_PRICE_LABEL} both lights. No charge on this screen. We take payment when we confirm, before we leave for your driveway.`
+                : "No charge on this screen. We take payment when we confirm, before we leave for your driveway."}
             </p>
           </section>
         </form>
