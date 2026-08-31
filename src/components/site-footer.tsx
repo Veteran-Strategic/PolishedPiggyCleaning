@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -49,21 +50,27 @@ export function SiteFooter() {
             </p>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Mobile headlight restoration in the Greater Cincinnati area. Crystal
-            clear headlights, right where you park.
+            Mobile auto detailing and headlight restoration in Greater
+            Cincinnati. We come to you.
           </p>
           <p className="mt-3 text-sm font-semibold text-primary">
             100% veteran owned
           </p>
         </div>
         <div className="grid gap-1 text-sm text-muted">
-          <p className="font-semibold text-fg">Service area</p>
-          <p>Greater Cincinnati</p>
-          <p>Mobile. We come to you.</p>
+          <p className="font-semibold text-fg">Pages</p>
+          <Link to="/headlights" className="hover:text-primary">
+            Headlight restoration
+          </Link>
+          <Link to="/book" className="hover:text-primary">
+            Book a visit
+          </Link>
         </div>
         <div className="grid gap-1 text-sm text-muted">
-          <p className="font-semibold text-fg">Crystal clear again</p>
-          <p>Brighter nights. A car that looks cared for.</p>
+          <p className="font-semibold text-fg">Service area</p>
+          <p>Greater Cincinnati</p>
+          <p>Northern Kentucky</p>
+          <p>Mobile. We come to you.</p>
         </div>
         <div className="grid gap-3 text-sm text-muted">
           <p className="font-semibold text-fg">Follow</p>

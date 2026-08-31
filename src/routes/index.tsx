@@ -1,8 +1,19 @@
-import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  component: Home,
+  head: () => ({
+    meta: [
+      { title: "The Polished Piggy | Mobile Detailing & Headlights" },
+      {
+        name: "description",
+        content:
+          "Mobile auto detailing and headlight restoration in Greater Cincinnati. We come to you. Friendly help. Serious results.",
+      },
+    ],
+  }),
+});
 
 function Home() {
   return (
@@ -12,101 +23,92 @@ function Home() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:py-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Mobile · Greater Cincinnati
+              Mobile · Greater Cincinnati · Veteran owned
             </p>
             <h1 className="mt-4 font-display text-3xl font-semibold uppercase leading-[1.08] tracking-wide text-fg sm:text-5xl lg:text-6xl">
-              Cloudy headlights? We’ll make them clear again.
+              Mobile detailing. Crystal-clear headlights.
             </h1>
             <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-              We restore yellowed, hazy headlights right in your driveway.
-              Brighter at night. A car that looks cared for again.
+              We come to your driveway. Full auto detailing and headlight
+              restoration. Friendly help. Serious results.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                to="/book"
+                to="/headlights"
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent sm:w-auto"
               >
-                Schedule a visit
+                Restore headlights
                 <ArrowRight className="size-4" />
               </Link>
-              <a
-                href="#results"
+              <Link
+                to="/book"
+                search={{ service: "detailing" }}
                 className="inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-semibold text-fg hover:border-primary/40 sm:w-auto"
               >
-                See the difference
-              </a>
+                Book a detail
+              </Link>
             </div>
-            <p className="mt-5 text-sm text-muted">
-              Most visits take about 15 minutes.
-            </p>
           </div>
           <div className="relative">
             <img
-              src="/photos/hero.jpg"
-              alt="Crystal-clear restored headlight on a dark SUV"
+              src="/photos/process.jpg"
+              alt="Mobile detailing in a Greater Cincinnati driveway"
               className="aspect-[4/3] w-full rounded-2xl object-cover"
             />
           </div>
         </div>
       </section>
 
-      <section className="border-y border-border bg-surface">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3 sm:px-6">
-          <Fact
-            icon={<MapPin className="size-5" />}
-            title="Right in your driveway"
-            body="No drop-off. No shop wait. We come to you across Greater Cincinnati."
-          />
-          <Fact
-            icon={<Clock className="size-5" />}
-            title="About 15 minutes"
-            body="You’re home the whole time. No shop drop-off."
-          />
-          <Fact
-            icon={<Sparkles className="size-5" />}
-            title="Crystal clear again"
-            body="You’ll notice it at night first. Then you’ll notice how much newer the car looks."
-          />
-        </div>
-      </section>
-
-      <section id="results" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
+      <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:px-6 lg:grid-cols-2">
+        <Link
+          to="/headlights"
+          className="group overflow-hidden rounded-2xl border border-border bg-surface"
+        >
           <img
             src="/photos/before-after.jpg"
-            alt="Yellowed, cloudy headlight next to a restored crystal-clear lens"
-            className="w-full rounded-2xl object-cover"
+            alt="Before and after headlight restoration"
+            className="aspect-[16/9] w-full object-cover"
           />
-          <div>
+          <div className="p-6">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
               Headlight restoration
             </p>
-            <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
-              Dull and yellowed is normal. It’s also fixable.
+            <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
+              Cloudy to clear. About 15 minutes.
             </h2>
-            <p className="mt-4 leading-relaxed text-muted">
-              Sun and weather cloud the plastic over time. That haze doesn’t
-              just look tired. It cuts how far you can see after dark. We bring
-              the clarity back and seal it so it lasts.
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Both lights, matched, sealed, in your driveway. This is the offer
+              we run ads on.
             </p>
-            <ul className="mt-6 space-y-3 text-sm">
-              {[
-                "We come to your house",
-                "Both headlights, matched",
-                "Results you can see, day and night",
-              ].map((item) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <p className="mt-4 text-sm font-semibold text-primary group-hover:underline">
+              See headlights →
+            </p>
+          </div>
+        </Link>
+
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <img
+            src="/photos/dusk.jpg"
+            alt="A detailed car at dusk"
+            className="aspect-[16/9] w-full object-cover"
+          />
+          <div className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              Auto detailing
+            </p>
+            <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
+              The full clean. We come to you.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Wash, interior, and the work that makes a daily driver look cared
+              for again. Tell us what the car needs when you book.
+            </p>
             <Link
               to="/book"
-              className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent sm:w-auto"
+              search={{ service: "detailing" }}
+              className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
             >
-              Get your headlights restored
-              <ArrowRight className="size-4" />
+              Book a detail →
             </Link>
           </div>
         </div>
@@ -122,35 +124,12 @@ function Home() {
               Friendly help. Serious results.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
-              We’re a mobile detailing service focused on headlight restoration.
-              We show up where you are, keep things straightforward, and aim
-              for results you can actually see.
+              100% veteran owned. Mobile across Greater Cincinnati and Northern
+              Kentucky. We show up where you park.
             </p>
           </div>
         </div>
       </section>
     </main>
-  );
-}
-
-function Fact({
-  icon,
-  title,
-  body,
-}: {
-  icon: ReactNode;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="flex gap-4">
-      <div className="grid size-10 shrink-0 place-items-center rounded-full bg-bg text-primary">
-        {icon}
-      </div>
-      <div>
-        <p className="font-semibold">{title}</p>
-        <p className="mt-1 text-sm leading-relaxed text-muted">{body}</p>
-      </div>
-    </div>
   );
 }

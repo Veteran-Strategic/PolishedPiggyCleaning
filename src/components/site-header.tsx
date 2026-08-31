@@ -8,9 +8,9 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
         <Logo />
         <nav className="hidden items-center gap-7 text-sm font-medium text-fg md:flex">
-          <a href="/#results" className="hover:text-primary">
-            Results
-          </a>
+          <Link to="/headlights" className="hover:text-primary">
+            Headlights
+          </Link>
           <Link to="/book" className="hover:text-primary">
             Book
           </Link>
@@ -26,10 +26,10 @@ export function SiteHeader() {
             <UserButton />
           </SignedIn>
           <Link
-            to="/book"
+            to="/headlights"
             className="inline-flex h-11 shrink-0 items-center rounded-full bg-primary px-3.5 text-sm font-semibold text-primary-fg hover:bg-accent sm:px-4"
           >
-            Book a visit
+            Restore headlights
           </Link>
         </div>
       </div>

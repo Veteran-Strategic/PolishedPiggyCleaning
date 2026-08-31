@@ -18,9 +18,20 @@ import {
   slotsForDay,
 } from "@/lib/schedule";
 
-export const Route = createFileRoute("/book")({ component: Book });
+const SERVICES = ["headlights", "detailing"] as const;
+type Service = (typeof SERVICES)[number];
+
+export const Route = createFileRoute("/book")({
+  validateSearch: (search: Record<string, unknown>): { service?: Service } => {
+    const raw = search.service;
+    if (raw === "headlights" || raw === "detailing") return { service: raw };
+    return {};
+  },
+  component: Book,
+});
 
 function Book() {
+  const { service } = Route.useSearch();
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [dayIso, setDayIso] = useState("");
   const [slotIso, setSlotIso] = useState<string | null>(null);
@@ -79,9 +90,16 @@ function Book() {
       setError("Pick a day and a window first.");
       return;
     }
+    const label =
+      service === "headlights"
+        ? "Service: Headlight restoration"
+        : service === "detailing"
+          ? "Service: Auto detailing"
+          : "";
+    const notes = [label, values.notes].filter(Boolean).join("\n");
     try {
       const result = await submitInquiry({
-        data: { ...values, scheduledFor: slotIso },
+        data: { ...values, notes, scheduledFor: slotIso },
       });
       setDoneAt(result.scheduledFor);
     } catch (err) {
@@ -95,20 +113,28 @@ function Book() {
     }
   }
 
+  const eyebrow =
+    service === "headlights"
+      ? "Book headlight restoration"
+      : service === "detailing"
+        ? "Book a mobile detail"
+        : "Book a mobile visit";
+
+  const blurb =
+    service === "headlights"
+      ? "Most headlight visits take about 15 minutes. Choose a two-hour arrival window and we’ll get there sometime in that range. We’ll text to confirm, and payment holds the visit before we drive over."
+      : "Choose a two-hour arrival window and we’ll get there sometime in that range. We’ll text to confirm, and payment holds the visit before we drive over.";
+
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          Book a mobile visit
+          {eyebrow}
         </p>
         <h1 className="mt-3 font-display text-3xl font-semibold uppercase tracking-wide sm:text-4xl">
           Pick a window. We’ll come to you.
         </h1>
-        <p className="mt-4 leading-relaxed text-muted">
-          Most visits take about 15 minutes. Choose a two-hour arrival window
-          and we’ll get there sometime in that range. We’ll text to confirm, and
-          payment holds the visit before we drive over.
-        </p>
+        <p className="mt-4 leading-relaxed text-muted">{blurb}</p>
       </div>
 
       {doneAt ? (

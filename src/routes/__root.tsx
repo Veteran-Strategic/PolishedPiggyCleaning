@@ -21,7 +21,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Mobile headlight restoration in Greater Cincinnati. Cloudy, yellowed headlights made crystal clear again, right in your driveway.",
+          "Mobile auto detailing and headlight restoration in Greater Cincinnati. We come to you.",
       },
       { name: "theme-color", content: "#0B0B0D" },
     ],
