@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { SignedIn, UserButton } from "@/lib/auth/gates";
 import { Logo } from "@/components/logo";
-import { HOURS_SHORT, PHONE_DISPLAY, PHONE_HREF } from "@/lib/business";
 
 export function SiteHeader() {
   return (
@@ -17,15 +16,6 @@ export function SiteHeader() {
           </Link>
         </nav>
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-          <a
-            href={PHONE_HREF}
-            className="hidden min-w-0 flex-col leading-tight sm:flex"
-          >
-            <span className="text-sm font-semibold text-fg hover:text-primary">
-              {PHONE_DISPLAY}
-            </span>
-            <span className="text-[11px] text-muted">{HOURS_SHORT}</span>
-          </a>
           <SignedIn>
             <Link
               to="/inbox"
@@ -36,10 +26,11 @@ export function SiteHeader() {
             <UserButton />
           </SignedIn>
           <Link
-            to="/headlights"
+            to="/book"
+            search={{ service: "headlights" }}
             className="inline-flex h-11 shrink-0 items-center rounded-full bg-primary px-3.5 text-sm font-semibold text-primary-fg hover:bg-accent sm:px-4"
           >
-            Restore headlights
+            Book a visit
           </Link>
         </div>
       </div>
