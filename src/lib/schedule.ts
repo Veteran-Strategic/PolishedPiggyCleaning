@@ -8,11 +8,12 @@ export const WINDOW_HOURS = [
   { start: 14, end: 15 },
   { start: 15, end: 16 },
   { start: 16, end: 17 },
+  { start: 17, end: 18 },
 ] as const;
 export const WINDOW_CAPACITY = 1;
 export const DAYS_AHEAD = 14;
 export const LEAD_MINUTES = 180;
-export const CLOSED_WEEKDAYS = new Set([0, 6]);
+export const CLOSED_WEEKDAYS = new Set([0]);
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
