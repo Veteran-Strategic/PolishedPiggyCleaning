@@ -131,6 +131,47 @@ function Home() {
         </div>
       </section>
 
+      <section className="border-t border-border">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl border border-border bg-black">
+            <video
+              className="aspect-square w-full bg-black object-cover"
+              controls
+              playsInline
+              preload="metadata"
+              poster="/videos/testimonial-poster.jpg"
+            >
+              <source src="/videos/testimonial.mp4" type="video/mp4" />
+              Your browser can’t play this video.
+            </video>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              From the neighborhood
+            </p>
+            <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
+              “I can’t recommend The Polished Piggy enough.”
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              A neighbor booked a full detail as a gift for a friend going
+              through treatment. She said we showed up on time, took a real
+              weight off both of them, and the van looked so clean you
+              couldn’t tell the kids had been in it.
+            </p>
+            <p className="mt-4 text-sm text-muted">
+              Two minutes. Her words. Hit play.
+            </p>
+            <Link
+              to="/book"
+              search={{ service: "detailing" }}
+              className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent"
+            >
+              Book a detail
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="max-w-2xl">
