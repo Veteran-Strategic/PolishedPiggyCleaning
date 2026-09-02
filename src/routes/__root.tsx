@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import { MetaPixel } from "@/components/meta-pixel";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import appCss from "../styles.css?url";
@@ -53,6 +54,7 @@ function Root() {
       </head>
       <body className="min-h-screen bg-bg font-sans text-fg">
         <PreviewHostBridge />
+        <MetaPixel />
         <AuthProvider>
           <SiteHeader />
           <Outlet />
