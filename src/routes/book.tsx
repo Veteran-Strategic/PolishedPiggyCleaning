@@ -12,11 +12,13 @@ import {
 } from "@/lib/inquiries";
 import {
   HEADLIGHT_DURATION,
+  HEADLIGHT_PRICE,
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
   PHONE_DISPLAY,
   PHONE_HREF,
 } from "@/lib/business";
+import { trackPixel } from "@/lib/meta-pixel";
 import {
   dayKey,
   formatAppointment,
@@ -109,6 +111,12 @@ function Book() {
         data: { ...values, notes, scheduledFor: slotIso },
       });
       setDoneAt(result.scheduledFor);
+      trackPixel("Schedule", {
+        content_name:
+          service === "headlights" ? "Headlight restoration" : "Mobile visit",
+        value: service === "headlights" ? HEADLIGHT_PRICE : 0,
+        currency: "USD",
+      });
     } catch (err) {
       setError(
         err instanceof Error
