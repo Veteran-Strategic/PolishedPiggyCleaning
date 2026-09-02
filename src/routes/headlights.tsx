@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Clock, MapPin, ShieldCheck } from "lucide-react";
 import {
   HEADLIGHT_DURATION,
+  HEADLIGHT_PRICE,
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
 } from "@/lib/business";
+import { trackPixel } from "@/lib/meta-pixel";
 
 export const Route = createFileRoute("/headlights")({
   component: Headlights,
@@ -22,6 +25,15 @@ export const Route = createFileRoute("/headlights")({
 });
 
 function Headlights() {
+  useEffect(() => {
+    trackPixel("ViewContent", {
+      content_name: "Headlight restoration",
+      content_type: "product",
+      value: HEADLIGHT_PRICE,
+      currency: "USD",
+    });
+  }, []);
+
   return (
     <main>
       <section className="relative overflow-hidden">
