@@ -18,7 +18,7 @@ export const Route = createFileRoute("/headlights")({
       {
         name: "description",
         content:
-          `Mobile headlight restoration in Greater Cincinnati. Both headlights ${HEADLIGHT_PRICE_LABEL}, ${HEADLIGHT_DURATION}, right in your driveway.`,
+          `Mobile headlight restoration in Greater Cincinnati. ${HEADLIGHT_PRICE_LABEL}, ${HEADLIGHT_DURATION}, right in your driveway.`,
       },
     ],
   }),
@@ -41,7 +41,7 @@ function Headlights() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:py-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Mobile · Greater Cincinnati · {HEADLIGHT_PRICE_LABEL} a pair
+              Mobile · Greater Cincinnati · {HEADLIGHT_PRICE_LABEL}
             </p>
             <h1 className="mt-4 font-display text-3xl font-semibold uppercase leading-[1.08] tracking-wide text-fg sm:text-5xl lg:text-6xl">
               Cloudy headlights? We’ll make them clear again.
@@ -61,7 +61,7 @@ function Headlights() {
               </Link>
             </div>
             <p className="mt-5 text-sm text-muted">
-              {HEADLIGHT_PRICE_LABEL} for both lights. Most visits take{" "}
+              Headlight restoration {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
               {HEADLIGHT_DURATION}. {HOURS_DISPLAY}.
             </p>
           </div>
@@ -89,8 +89,8 @@ function Headlights() {
           />
           <Fact
             icon={<ShieldCheck className="size-5" />}
-            title={`${HEADLIGHT_PRICE_LABEL} a pair. Insured.`}
-            body="Both headlights, matched and sealed. Veteran owned."
+            title={`${HEADLIGHT_PRICE_LABEL}. Insured.`}
+            body="Matched and sealed. Veteran owned."
           />
         </div>
       </section>
@@ -116,7 +116,7 @@ function Headlights() {
             </p>
             <ul className="mt-6 space-y-3 text-sm">
               {[
-                `${HEADLIGHT_PRICE_LABEL} for both headlights`,
+                `${HEADLIGHT_PRICE_LABEL}`,
                 `Most visits take ${HEADLIGHT_DURATION}`,
                 "We come to your house. Insured.",
               ].map((item) => (
