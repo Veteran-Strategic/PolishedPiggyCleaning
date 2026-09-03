@@ -101,7 +101,7 @@ function Book() {
     }
     const label =
       service === "headlights"
-        ? `Service: Headlight restoration (${HEADLIGHT_PRICE_LABEL} both lights)`
+        ? `Service: Headlight restoration (${HEADLIGHT_PRICE_LABEL})`
         : service === "detailing"
           ? "Service: Auto detailing"
           : "";
@@ -137,8 +137,8 @@ function Book() {
 
   const blurb =
     service === "headlights"
-      ? `Both headlights ${HEADLIGHT_PRICE_LABEL}. Most visits take ${HEADLIGHT_DURATION}. You pick an hour so travel is covered. We’ll text to confirm. Payment holds the visit before we drive over.`
-      : "You pick an hour. We’ll text to confirm. Payment holds the visit before we drive over.";
+      ? `Headlight restoration ${HEADLIGHT_PRICE_LABEL}. Most visits take ${HEADLIGHT_DURATION}. You pick an hour so travel is covered. We’ll text to confirm. Pay when we get there.`
+      : "You pick an hour. We’ll text to confirm. Pay when we get there.";
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -161,13 +161,12 @@ function Book() {
       {service === "headlights" ? (
         <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface p-5 text-sm leading-relaxed">
           <p className="font-semibold text-fg">
-            Headlight restoration · {HEADLIGHT_PRICE_LABEL} both lights
+            Headlight restoration · {HEADLIGHT_PRICE_LABEL}
           </p>
           <p className="mt-2 text-muted">
             Matched and sealed in your driveway. Most visits take{" "}
-            {HEADLIGHT_DURATION}. Insured. No charge on this screen — we take
-            payment when we confirm, before we leave for your driveway. Weather
-            cancels get moved, not billed.
+            {HEADLIGHT_DURATION}. Insured. No charge on this screen — pay when
+            we get there. Weather cancels get moved, not billed.
           </p>
         </div>
       ) : null}
@@ -182,7 +181,7 @@ function Book() {
           </h2>
           <p className="mt-3 leading-relaxed text-muted">
             {formatAppointment(new Date(doneAt))}. Watch your phone. We’ll
-            confirm and take payment before we head your way.
+            confirm, then collect payment when we arrive.
           </p>
         </div>
       ) : (
@@ -298,8 +297,8 @@ function Book() {
             </button>
             <p className="text-xs leading-relaxed text-muted">
               {service === "headlights"
-                ? `${HEADLIGHT_PRICE_LABEL} both lights. No charge on this screen. We take payment when we confirm, before we leave for your driveway.`
-                : "No charge on this screen. We take payment when we confirm, before we leave for your driveway."}
+                ? `${HEADLIGHT_PRICE_LABEL}. No charge on this screen. Pay when we get there.`
+                : "No charge on this screen. Pay when we get there."}
             </p>
           </section>
         </form>
