@@ -69,7 +69,7 @@ export function SiteFooter() {
           </p>
           <p className="mt-1 text-sm text-muted">{HOURS_DISPLAY}</p>
           <p className="mt-1 text-sm text-muted">
-            Headlights {HEADLIGHT_PRICE_LABEL} a pair. Insured.
+            Headlight restoration {HEADLIGHT_PRICE_LABEL}. Insured.
           </p>
         </div>
         <div className="grid gap-1 text-sm text-muted">

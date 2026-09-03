@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          `Mobile auto detailing and headlight restoration in Greater Cincinnati. Both headlights ${HEADLIGHT_PRICE_LABEL}. We come to you. Friendly help. Serious results.`,
+          `Mobile auto detailing and headlight restoration in Greater Cincinnati. Headlight restoration ${HEADLIGHT_PRICE_LABEL}. We come to you. Friendly help. Serious results.`,
       },
     ],
   }),
@@ -40,7 +40,7 @@ function Home() {
               restoration. Friendly help. Serious results.
             </p>
             <p className="mt-4 text-sm font-semibold text-fg">
-              Both headlights {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
+              Headlight restoration {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
               {HEADLIGHT_DURATION}. Insured.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -91,10 +91,10 @@ function Home() {
               Headlight restoration
             </p>
             <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
-              Cloudy to clear. {HEADLIGHT_PRICE_LABEL} a pair.
+              Cloudy to clear. {HEADLIGHT_PRICE_LABEL}.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Both lights, matched, sealed, in your driveway. Most visits take{" "}
+              Matched and sealed in your driveway. Most visits take{" "}
               {HEADLIGHT_DURATION}. This is the offer we run ads on.
             </p>
             <p className="mt-4 text-sm font-semibold text-primary group-hover:underline">
