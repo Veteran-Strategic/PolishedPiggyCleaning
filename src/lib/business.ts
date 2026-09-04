@@ -59,8 +59,8 @@ export const PACKAGES: Record<ServiceId, ServicePackage> = {
     id: "interior",
     name: "Interior",
     eyebrow: "Inside",
-    price: 149,
-    priceLabel: "from $149",
+    price: 155,
+    priceLabel: "from $155",
     duration: "about 1.5–2.5 hours",
     blurb: "Cabin reset. Vacuum, surfaces, glass, and the spots people actually touch.",
     includes: [
@@ -74,8 +74,8 @@ export const PACKAGES: Record<ServiceId, ServicePackage> = {
     id: "exterior",
     name: "Exterior",
     eyebrow: "Outside",
-    price: 99,
-    priceLabel: "from $99",
+    price: 100,
+    priceLabel: "from $100",
     duration: "about 1–2 hours",
     blurb: "Foam, hand wash, wheels, tires, glass, and a spray sealant.",
     includes: [
@@ -89,8 +89,8 @@ export const PACKAGES: Record<ServiceId, ServicePackage> = {
     id: "detailing",
     name: "Full detail",
     eyebrow: "Both",
-    price: 229,
-    priceLabel: "from $229",
+    price: 225,
+    priceLabel: "from $225",
     duration: "about 2.5–4 hours",
     blurb:
       "Interior and exterior in one visit. The daily driver looks cared for again.",
@@ -143,9 +143,9 @@ export const SERVICE_PRICES: Record<
   Exclude<ServiceId, "headlights">,
   Record<SizeId, number>
 > = {
-  interior: { sedan: 149, suv: 179, truck: 219 },
-  exterior: { sedan: 99, suv: 119, truck: 149 },
-  detailing: { sedan: 229, suv: 279, truck: 339 },
+  interior: { sedan: 155, suv: 185, truck: 225 },
+  exterior: { sedan: 100, suv: 125, truck: 155 },
+  detailing: { sedan: 225, suv: 275, truck: 335 },
 };
 
 export const ADDONS: Record<
@@ -162,14 +162,14 @@ export const ADDONS: Record<
     id: "clay",
     name: "Clay bar",
     blurb: "Pulls embedded grit off the paint before protection.",
-    prices: { sedan: 50, suv: 65, truck: 75 },
+    prices: { sedan: 50, suv: 65, truck: 80 },
     services: ["exterior", "detailing"],
   },
   correction: {
     id: "correction",
     name: "Paint correction",
     blurb: "Light cut for swirls. Heavier work is quoted on site.",
-    prices: { sedan: 175, suv: 225, truck: 275 },
+    prices: { sedan: 250, suv: 300, truck: 350 },
     services: ["exterior", "detailing"],
   },
   headlights: {
