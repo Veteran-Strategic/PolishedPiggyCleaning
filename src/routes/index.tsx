@@ -4,23 +4,27 @@ import {
   HEADLIGHT_DURATION,
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
+  PACKAGES,
   PHONE_DISPLAY,
   PHONE_HREF,
+  type ServiceId,
 } from "@/lib/business";
 
 export const Route = createFileRoute("/")({
   component: Home,
   head: () => ({
     meta: [
-      { title: "The Polished Piggy | Mobile Detailing & Headlights" },
+      { title: "The Polished Piggy | Mobile Auto Detailing in Cincinnati" },
       {
         name: "description",
         content:
-          `Mobile auto detailing and headlight restoration in Greater Cincinnati. Headlight restoration ${HEADLIGHT_PRICE_LABEL}. We come to you. Friendly help. Serious results.`,
+          `Mobile auto detailing in Greater Cincinnati. Full details ${PACKAGES.detailing.priceLabel}. We come to your driveway. Friendly help. Serious results.`,
       },
     ],
   }),
 });
+
+const MENU: ServiceId[] = ["detailing", "interior", "exterior"];
 
 function Home() {
   return (
@@ -33,31 +37,30 @@ function Home() {
               Mobile · Greater Cincinnati · Veteran owned
             </p>
             <h1 className="mt-4 font-display text-3xl font-semibold uppercase leading-[1.08] tracking-wide text-fg sm:text-5xl lg:text-6xl">
-              Mobile detailing. Crystal-clear headlights.
+              Mobile auto detailing. We come to you.
             </h1>
             <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-              We come to your driveway. Full auto detailing and headlight
-              restoration. Friendly help. Serious results.
+              Full details, interiors, and exteriors in your driveway. Friendly
+              help. Serious results.
             </p>
             <p className="mt-4 text-sm font-semibold text-fg">
-              Headlight restoration {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
-              {HEADLIGHT_DURATION}. Insured.
+              Full detail {PACKAGES.detailing.priceLabel}. Insured. Mon–Sat.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                to="/headlights"
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent sm:w-auto"
-              >
-                Restore headlights
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
                 to="/book"
                 search={{ service: "detailing" }}
-                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-semibold text-fg hover:border-primary/40 sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent sm:w-auto"
               >
                 Book a detail
+                <ArrowRight className="size-4" />
               </Link>
+              <a
+                href="/#packages"
+                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-semibold text-fg hover:border-primary/40 sm:w-auto"
+              >
+                See packages
+              </a>
             </div>
             <p className="mt-5 text-sm text-muted">
               <a href={PHONE_HREF} className="font-semibold text-fg hover:text-primary">
@@ -76,57 +79,104 @@ function Home() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:px-6 lg:grid-cols-2">
-        <Link
-          to="/headlights"
-          className="group overflow-hidden rounded-2xl border border-border bg-surface"
-        >
+      <section id="packages" className="border-t border-border">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            Packages
+          </p>
+          <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
+            Simple menu. Starting prices.
+          </h2>
+          <p className="mt-4 max-w-2xl leading-relaxed text-muted">
+            Prices below are for a typical sedan or daily driver. SUVs, trucks,
+            and heavier interiors cost more. We confirm before we start. Pay when
+            we get there.
+          </p>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+            {MENU.map((id) => {
+              const pkg = PACKAGES[id];
+              const featured = id === "detailing";
+              return (
+                <div
+                  key={pkg.id}
+                  className={`flex flex-col rounded-2xl border bg-surface p-6 ${
+                    featured ? "border-primary/50" : "border-border"
+                  }`}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                    {pkg.eyebrow}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
+                    {pkg.name}
+                  </h3>
+                  <p className="mt-3 text-2xl font-semibold text-fg">
+                    {pkg.priceLabel}
+                  </p>
+                  <p className="mt-1 text-sm text-muted">{pkg.duration}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {pkg.blurb}
+                  </p>
+                  <ul className="mt-5 space-y-2 text-sm">
+                    {pkg.includes.map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/book"
+                    search={{ service: pkg.id }}
+                    className={`mt-8 inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${
+                      featured
+                        ? "bg-primary text-primary-fg hover:bg-accent"
+                        : "border border-border text-fg hover:border-primary/40"
+                    }`}
+                  >
+                    Book {pkg.name.toLowerCase()}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
           <img
             src="/photos/before-after.jpg"
             alt="Before and after headlight restoration"
-            className="aspect-[16/9] w-full object-cover"
+            className="w-full rounded-2xl object-cover"
           />
-          <div className="p-6">
+          <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Headlight restoration
+              Add-on · Also the ad offer
             </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
-              Cloudy to clear. {HEADLIGHT_PRICE_LABEL}.
+            <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
+              Cloudy headlights? {HEADLIGHT_PRICE_LABEL} for the pair.
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
+            <p className="mt-4 leading-relaxed text-muted">
               Matched and sealed in your driveway. Most visits take{" "}
-              {HEADLIGHT_DURATION}. This is the offer we run ads on.
+              {HEADLIGHT_DURATION}. Book it alone or add it when we are already
+              there for a detail.
             </p>
-            <p className="mt-4 text-sm font-semibold text-primary group-hover:underline">
-              See headlights →
-            </p>
-          </div>
-        </Link>
-
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-          <img
-            src="/photos/dusk.jpg"
-            alt="A detailed car at dusk"
-            className="aspect-[16/9] w-full object-cover"
-          />
-          <div className="p-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Auto detailing
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-wide">
-              The full clean. We come to you.
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              Wash, interior, and the work that makes a daily driver look cared
-              for again. Tell us what the car needs when you book.
-            </p>
-            <Link
-              to="/book"
-              search={{ service: "detailing" }}
-              className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
-            >
-              Book a detail →
-            </Link>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/book"
+                search={{ service: "headlights" }}
+                className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent"
+              >
+                Book headlights
+              </Link>
+              <Link
+                to="/headlights"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-border px-6 text-sm font-semibold text-fg hover:border-primary/40"
+              >
+                Headlights page
+              </Link>
+            </div>
           </div>
         </div>
       </section>

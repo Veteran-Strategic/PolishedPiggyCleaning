@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +11,14 @@ import {
   type DetailsInput,
 } from "@/lib/inquiries";
 import {
-  HEADLIGHT_DURATION,
-  HEADLIGHT_PRICE,
-  HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
+  PACKAGES,
   PHONE_DISPLAY,
   PHONE_HREF,
+  SERVICE_IDS,
+  isServiceId,
+  packageFor,
+  type ServiceId,
 } from "@/lib/business";
 import { trackPixel } from "@/lib/meta-pixel";
 import {
@@ -27,13 +29,9 @@ import {
   slotsForDay,
 } from "@/lib/schedule";
 
-const SERVICES = ["headlights", "detailing"] as const;
-type Service = (typeof SERVICES)[number];
-
 export const Route = createFileRoute("/book")({
-  validateSearch: (search: Record<string, unknown>): { service?: Service } => {
-    const raw = search.service;
-    if (raw === "headlights" || raw === "detailing") return { service: raw };
+  validateSearch: (search: Record<string, unknown>): { service?: ServiceId } => {
+    if (isServiceId(search.service)) return { service: search.service };
     return {};
   },
   component: Book,
@@ -41,6 +39,7 @@ export const Route = createFileRoute("/book")({
 
 function Book() {
   const { service } = Route.useSearch();
+  const selected = packageFor(service);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [dayIso, setDayIso] = useState("");
   const [slotIso, setSlotIso] = useState<string | null>(null);
@@ -99,12 +98,9 @@ function Book() {
       setError("Pick a day and a time first.");
       return;
     }
-    const label =
-      service === "headlights"
-        ? `Service: Headlight restoration (${HEADLIGHT_PRICE_LABEL})`
-        : service === "detailing"
-          ? "Service: Auto detailing"
-          : "";
+    const label = selected
+      ? `Service: ${selected.name} (${selected.priceLabel})`
+      : "Service: Mobile visit";
     const notes = [label, values.notes].filter(Boolean).join("\n");
     try {
       const result = await submitInquiry({
@@ -112,9 +108,8 @@ function Book() {
       });
       setDoneAt(result.scheduledFor);
       trackPixel("Schedule", {
-        content_name:
-          service === "headlights" ? "Headlight restoration" : "Mobile visit",
-        value: service === "headlights" ? HEADLIGHT_PRICE : 0,
+        content_name: selected?.name ?? "Mobile visit",
+        value: selected?.price ?? 0,
         currency: "USD",
       });
     } catch (err) {
@@ -128,17 +123,10 @@ function Book() {
     }
   }
 
-  const eyebrow =
-    service === "headlights"
-      ? "Book headlight restoration"
-      : service === "detailing"
-        ? "Book a mobile detail"
-        : "Book a mobile visit";
-
-  const blurb =
-    service === "headlights"
-      ? `Headlight restoration ${HEADLIGHT_PRICE_LABEL}. Most visits take ${HEADLIGHT_DURATION}. You pick an hour so travel is covered. We’ll text to confirm. Pay when we get there.`
-      : "You pick an hour. We’ll text to confirm. Pay when we get there.";
+  const eyebrow = selected ? `Book ${selected.name.toLowerCase()}` : "Book a mobile visit";
+  const blurb = selected
+    ? `${selected.name} ${selected.priceLabel}. ${selected.duration}. You pick a start time so travel is covered. We’ll text to confirm. Pay when we get there.`
+    : "Pick a package, then a start time. We’ll text to confirm. Pay when we get there.";
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -158,15 +146,40 @@ function Book() {
         </p>
       </div>
 
-      {service === "headlights" ? (
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {SERVICE_IDS.map((id) => {
+          const pkg = PACKAGES[id];
+          const active = service === id;
+          return (
+            <Link
+              key={id}
+              to="/book"
+              search={{ service: id }}
+              className="rounded-2xl border px-4 py-4 text-left"
+              style={{
+                borderColor: active ? "var(--color-primary)" : "var(--color-border)",
+                background: active ? "var(--color-surface)" : "transparent",
+              }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                {pkg.eyebrow}
+              </p>
+              <p className="mt-1 font-semibold text-fg">{pkg.name}</p>
+              <p className="mt-1 text-sm text-muted">{pkg.priceLabel}</p>
+            </Link>
+          );
+        })}
+      </div>
+
+      {selected ? (
         <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface p-5 text-sm leading-relaxed">
           <p className="font-semibold text-fg">
-            Headlight restoration · {HEADLIGHT_PRICE_LABEL}
+            {selected.name} · {selected.priceLabel}
           </p>
           <p className="mt-2 text-muted">
-            Matched and sealed in your driveway. Most visits take{" "}
-            {HEADLIGHT_DURATION}. Insured. No charge on this screen — pay when
-            we get there. Weather cancels get moved, not billed.
+            {selected.blurb} {selected.duration}. Starting price for a typical
+            sedan. Size and condition can change it. No charge on this screen —
+            pay when we get there. Weather cancels get moved, not billed.
           </p>
         </div>
       ) : null}
@@ -218,7 +231,7 @@ function Book() {
             </div>
 
             <h2 className="mt-8 font-display text-lg uppercase tracking-wide">
-              2. Choose a time
+              2. Choose a start time
             </h2>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {slots.map((slot) => (
@@ -240,8 +253,9 @@ function Book() {
               </p>
             ) : (
               <p className="mt-3 text-sm text-muted">
-                Monday–Saturday, 9:00 AM–6:00 PM. Each booking holds the full
-                hour. Closed Sundays. Eastern time.
+                Monday–Saturday start times, 9:00 AM–5:00 PM. A full detail
+                often needs a longer block — we’ll confirm after you book.
+                Closed Sundays. Eastern time.
               </p>
             )}
           </section>
@@ -296,8 +310,8 @@ function Book() {
               {form.formState.isSubmitting ? "Holding…" : "Hold this time"}
             </button>
             <p className="text-xs leading-relaxed text-muted">
-              {service === "headlights"
-                ? `${HEADLIGHT_PRICE_LABEL}. No charge on this screen. Pay when we get there.`
+              {selected
+                ? `${selected.priceLabel}. No charge on this screen. Pay when we get there.`
                 : "No charge on this screen. Pay when we get there."}
             </p>
           </section>
