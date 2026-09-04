@@ -48,11 +48,11 @@ function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                to="/book"
+                to="/quote"
                 search={{ service: "detailing" }}
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent sm:w-auto"
               >
-                Book a detail
+                Start your quote
                 <ArrowRight className="size-4" />
               </Link>
               <a
@@ -126,7 +126,7 @@ function Home() {
                     ))}
                   </ul>
                   <Link
-                    to="/book"
+                    to="/quote"
                     search={{ service: pkg.id }}
                     className={`mt-8 inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${
                       featured
@@ -134,7 +134,7 @@ function Home() {
                         : "border border-border text-fg hover:border-primary/40"
                     }`}
                   >
-                    Book {pkg.name.toLowerCase()}
+                    Start your quote
                   </Link>
                 </div>
               );
@@ -164,11 +164,11 @@ function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/book"
+                to="/quote"
                 search={{ service: "headlights" }}
                 className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent"
               >
-                Book headlights
+                Start your quote
               </Link>
               <Link
                 to="/headlights"
@@ -214,11 +214,11 @@ function Home() {
               Two minutes. Her words. Hit play.
             </p>
             <Link
-              to="/book"
+              to="/quote"
               search={{ service: "detailing" }}
               className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-accent"
             >
-              Book a detail
+              Start your quote
             </Link>
           </div>
         </div>
