@@ -14,8 +14,8 @@ export function SiteHeader() {
           <Link to="/headlights" className="hover:text-primary">
             Headlights
           </Link>
-          <Link to="/book" search={{ service: "detailing" }} className="hover:text-primary">
-            Book
+          <Link to="/quote" search={{ service: "detailing" }} className="hover:text-primary">
+            Quote
           </Link>
         </nav>
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
@@ -29,11 +29,11 @@ export function SiteHeader() {
             <UserButton />
           </SignedIn>
           <Link
-            to="/book"
+            to="/quote"
             search={{ service: "detailing" }}
             className="inline-flex h-11 shrink-0 items-center rounded-full bg-primary px-3.5 text-sm font-semibold text-primary-fg hover:bg-accent sm:px-4"
           >
-            Book a detail
+            Start your quote
           </Link>
         </div>
       </div>

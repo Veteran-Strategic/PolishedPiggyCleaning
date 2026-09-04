@@ -6,6 +6,29 @@ export const HEADLIGHT_PRICE = 125;
 export const HEADLIGHT_PRICE_LABEL = "$125";
 export const HEADLIGHT_DURATION = "under 30 minutes";
 
+export const SOCIALS = [
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/thepolishedpiggy",
+    handle: "@thepolishedpiggy",
+  },
+  {
+    name: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61593426174066",
+    handle: "The Polished Piggy",
+  },
+  {
+    name: "TikTok",
+    href: "https://www.tiktok.com/@thepolishedpiggy",
+    handle: "@thepolishedpiggy",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@polishedpiggydetailing",
+    handle: "@polishedpiggydetailing",
+  },
+] as const;
+
 export const SERVICE_IDS = [
   "detailing",
   "interior",
