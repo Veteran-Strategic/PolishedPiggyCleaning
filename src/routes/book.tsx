@@ -16,9 +16,13 @@ import {
   PHONE_DISPLAY,
   PHONE_HREF,
   SERVICE_IDS,
-  isServiceId,
-  packageFor,
-  type ServiceId,
+  availableAddons,
+  money,
+  parseAddons,
+  parseQuoteSearch,
+  quoteSummary,
+  quoteTotal,
+  type QuoteSearch,
 } from "@/lib/business";
 import { trackPixel } from "@/lib/meta-pixel";
 import {
@@ -30,16 +34,20 @@ import {
 } from "@/lib/schedule";
 
 export const Route = createFileRoute("/book")({
-  validateSearch: (search: Record<string, unknown>): { service?: ServiceId } => {
-    if (isServiceId(search.service)) return { service: search.service };
-    return {};
-  },
+  validateSearch: (search: Record<string, unknown>): QuoteSearch =>
+    parseQuoteSearch(search),
   component: Book,
 });
 
 function Book() {
-  const { service } = Route.useSearch();
-  const selected = packageFor(service);
+  const search = Route.useSearch();
+  const { service, size } = search;
+  const addons = parseAddons(search.addons).filter((id) =>
+    availableAddons(service).includes(id),
+  );
+  const selected = service ? PACKAGES[service] : null;
+  const total = quoteTotal(service, size, addons);
+  const summary = quoteSummary(service, size, addons);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [dayIso, setDayIso] = useState("");
   const [slotIso, setSlotIso] = useState<string | null>(null);
@@ -98,9 +106,7 @@ function Book() {
       setError("Pick a day and a time first.");
       return;
     }
-    const label = selected
-      ? `Service: ${selected.name} (${selected.priceLabel})`
-      : "Service: Mobile visit";
+    const label = `Quote: ${summary}`;
     const notes = [label, values.notes].filter(Boolean).join("\n");
     try {
       const result = await submitInquiry({
@@ -109,7 +115,7 @@ function Book() {
       setDoneAt(result.scheduledFor);
       trackPixel("Schedule", {
         content_name: selected?.name ?? "Mobile visit",
-        value: selected?.price ?? 0,
+        value: total ?? 0,
         currency: "USD",
       });
     } catch (err) {
@@ -123,27 +129,33 @@ function Book() {
     }
   }
 
-  const eyebrow = selected ? `Book ${selected.name.toLowerCase()}` : "Book a mobile visit";
-  const blurb = selected
-    ? `${selected.name} ${selected.priceLabel}. ${selected.duration}. You pick a start time so travel is covered. We’ll text to confirm. Pay when we get there.`
-    : "Pick a package, then a start time. We’ll text to confirm. Pay when we get there.";
-
   return (
     <main className="mx-auto w-full min-w-0 max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          {eyebrow}
+          Book a time
         </p>
         <h1 className="mt-3 font-display text-3xl font-semibold uppercase tracking-wide sm:text-4xl">
-          Pick a time. We’ll come to you.
+          Pick a start time. We’ll come to you.
         </h1>
-        <p className="mt-4 leading-relaxed text-muted">{blurb}</p>
+        <p className="mt-4 leading-relaxed text-muted">
+          {selected
+            ? `${summary}. We’ll text to confirm. Pay when we get there.`
+            : "Want a price first? Start a quote, then hold a time."}
+        </p>
         <p className="mt-3 text-sm text-muted">
           <a href={PHONE_HREF} className="font-semibold text-fg hover:text-primary">
             {PHONE_DISPLAY}
           </a>
           {" · "}{HOURS_DISPLAY}
         </p>
+        <Link
+          to="/quote"
+          search={search}
+          className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
+        >
+          Edit quote →
+        </Link>
       </div>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -154,7 +166,7 @@ function Book() {
             <Link
               key={id}
               to="/book"
-              search={{ service: id }}
+              search={{ ...search, service: id, addons: id === "headlights" ? undefined : search.addons, size: id === "headlights" ? undefined : search.size }}
               className="rounded-2xl border px-4 py-4 text-left"
               style={{
                 borderColor: active ? "var(--color-primary)" : "var(--color-border)",
@@ -173,13 +185,10 @@ function Book() {
 
       {selected ? (
         <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface p-5 text-sm leading-relaxed">
-          <p className="font-semibold text-fg">
-            {selected.name} · {selected.priceLabel}
-          </p>
+          <p className="font-semibold text-fg">{summary}</p>
           <p className="mt-2 text-muted">
-            {selected.blurb} {selected.duration}. Starting price for a typical
-            sedan. Size and condition can change it. No charge on this screen —
-            pay when we get there. Weather cancels get moved, not billed.
+            {selected.blurb} Starting price. Size and condition can change it.
+            No charge on this screen — pay when we get there.
           </p>
         </div>
       ) : null}
@@ -193,8 +202,8 @@ function Book() {
             You’re on the calendar.
           </h2>
           <p className="mt-3 leading-relaxed text-muted">
-            {formatAppointment(new Date(doneAt))}. Watch your phone. We’ll
-            confirm, then collect payment when we arrive.
+            {formatAppointment(new Date(doneAt))}. {summary}. Watch your phone.
+            We’ll confirm, then collect payment when we arrive.
           </p>
         </div>
       ) : (
@@ -310,8 +319,8 @@ function Book() {
               {form.formState.isSubmitting ? "Holding…" : "Hold this time"}
             </button>
             <p className="text-xs leading-relaxed text-muted">
-              {selected
-                ? `${selected.priceLabel}. No charge on this screen. Pay when we get there.`
+              {total != null
+                ? `${money(total)} starting. No charge on this screen. Pay when we get there.`
                 : "No charge on this screen. Pay when we get there."}
             </p>
           </section>
