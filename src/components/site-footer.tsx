@@ -7,30 +7,15 @@ import {
   PACKAGES,
   PHONE_DISPLAY,
   PHONE_HREF,
+  SOCIALS,
 } from "@/lib/business";
 
-const socials = [
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/thepolishedpiggy",
-    icon: Instagram,
-  },
-  {
-    name: "YouTube",
-    href: "https://www.youtube.com/@polishedpiggydetailing",
-    icon: Youtube,
-  },
-  {
-    name: "TikTok",
-    href: "https://www.tiktok.com/@thepolishedpiggy",
-    icon: TikTokIcon,
-  },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61593426174066",
-    icon: Facebook,
-  },
-];
+const socialIcons = {
+  Instagram,
+  YouTube: Youtube,
+  TikTok: TikTokIcon,
+  Facebook,
+} as const;
 
 function TikTokIcon({ className }: { className?: string }) {
   return (
@@ -82,8 +67,11 @@ export function SiteFooter() {
           <Link to="/headlights" className="hover:text-primary">
             Headlight restoration
           </Link>
+          <Link to="/quote" search={{ service: "detailing" }} className="hover:text-primary">
+            Start your quote
+          </Link>
           <Link to="/book" search={{ service: "detailing" }} className="hover:text-primary">
-            Book a detail
+            Book a time
           </Link>
         </div>
         <div className="grid gap-1 text-sm text-muted">
@@ -95,18 +83,21 @@ export function SiteFooter() {
         <div className="grid gap-3 text-sm text-muted">
           <p className="font-semibold text-fg">Follow</p>
           <div className="flex flex-wrap items-center gap-1">
-            {socials.map(({ name, href, icon: Icon }) => (
-              <a
-                key={name}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={name}
-                className="inline-flex size-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-border hover:text-primary"
-              >
-                <Icon className="size-5" />
-              </a>
-            ))}
+            {SOCIALS.map(({ name, href }) => {
+              const Icon = socialIcons[name];
+              return (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
+                  className="inline-flex size-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-border hover:text-primary"
+                >
+                  <Icon className="size-5" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
