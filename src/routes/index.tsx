@@ -155,7 +155,7 @@ function Home() {
               Add-on · Also the ad offer
             </p>
             <h2 className="mt-3 font-display text-2xl font-semibold uppercase tracking-wide sm:text-4xl">
-              Cloudy headlights? {HEADLIGHT_PRICE_LABEL} for the pair.
+              Cloudy headlights? {HEADLIGHT_PRICE_LABEL}.
             </h2>
             <p className="mt-4 leading-relaxed text-muted">
               Matched and sealed in your driveway. Most visits take{" "}

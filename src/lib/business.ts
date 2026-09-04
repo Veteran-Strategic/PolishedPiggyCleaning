@@ -81,9 +81,9 @@ export const PACKAGES: Record<ServiceId, ServicePackage> = {
     duration: HEADLIGHT_DURATION,
     blurb: "Cloudy to clear. Matched and sealed in your driveway.",
     includes: [
-      `${HEADLIGHT_PRICE_LABEL} for the pair`,
+      HEADLIGHT_PRICE_LABEL,
       `Most visits take ${HEADLIGHT_DURATION}`,
-      "Sand, restore, and seal both lights",
+      "Restore and seal the lenses",
       "Insured. We come to you.",
     ],
   },
