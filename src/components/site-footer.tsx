@@ -4,6 +4,7 @@ import { Logo } from "@/components/logo";
 import {
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
+  PACKAGES,
   PHONE_DISPLAY,
   PHONE_HREF,
 } from "@/lib/business";
@@ -56,8 +57,8 @@ export function SiteFooter() {
             </p>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Mobile auto detailing and headlight restoration in Greater
-            Cincinnati. We come to you.
+            Mobile auto detailing in Greater Cincinnati. We come to your
+            driveway. Headlight restoration when you need it.
           </p>
           <p className="mt-3 text-sm font-semibold text-primary">
             100% veteran owned
@@ -69,16 +70,20 @@ export function SiteFooter() {
           </p>
           <p className="mt-1 text-sm text-muted">{HOURS_DISPLAY}</p>
           <p className="mt-1 text-sm text-muted">
-            Headlight restoration {HEADLIGHT_PRICE_LABEL}. Insured.
+            Full detail {PACKAGES.detailing.priceLabel}. Headlights{" "}
+            {HEADLIGHT_PRICE_LABEL}. Insured.
           </p>
         </div>
         <div className="grid gap-1 text-sm text-muted">
           <p className="font-semibold text-fg">Pages</p>
+          <a href="/#packages" className="hover:text-primary">
+            Detailing packages
+          </a>
           <Link to="/headlights" className="hover:text-primary">
             Headlight restoration
           </Link>
-          <Link to="/book" className="hover:text-primary">
-            Book a visit
+          <Link to="/book" search={{ service: "detailing" }} className="hover:text-primary">
+            Book a detail
           </Link>
         </div>
         <div className="grid gap-1 text-sm text-muted">

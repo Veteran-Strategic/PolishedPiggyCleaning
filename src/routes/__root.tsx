@@ -22,7 +22,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Mobile auto detailing and headlight restoration in Greater Cincinnati. We come to you.",
+          "Mobile auto detailing in Greater Cincinnati. We come to your driveway. Full details, interiors, exteriors, and headlight restoration.",
       },
       { name: "theme-color", content: "#0B0B0D" },
     ],
