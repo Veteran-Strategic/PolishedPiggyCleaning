@@ -152,6 +152,12 @@ function Headlights() {
               Cincinnati. I show up where you park, keep things straightforward,
               and aim for results you can actually see.
             </p>
+            <p className="mt-4 text-sm text-muted">
+              We also do full mobile detailing.{" "}
+              <Link to="/" className="font-semibold text-fg hover:text-primary">
+                See packages →
+              </Link>
+            </p>
           </div>
         </div>
       </section>
