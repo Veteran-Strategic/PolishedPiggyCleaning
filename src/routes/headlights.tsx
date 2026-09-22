@@ -4,6 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Clock, MapPin, ShieldCheck } from "lucide-react";
 import {
   HEADLIGHT_DURATION,
+  HEADLIGHT_GUARANTEE,
   HEADLIGHT_PRICE,
   HEADLIGHT_PRICE_LABEL,
   HOURS_DISPLAY,
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/headlights")({
       {
         name: "description",
         content:
-          `Mobile headlight restoration in Greater Cincinnati. ${HEADLIGHT_PRICE_LABEL}, ${HEADLIGHT_DURATION}, right in your driveway.`,
+          `Mobile headlight restoration in Greater Cincinnati and Northern Kentucky. ${HEADLIGHT_PRICE_LABEL} for both headlights, ${HEADLIGHT_DURATION}, ${HEADLIGHT_GUARANTEE}, right in your driveway.`,
       },
     ],
   }),
@@ -41,7 +42,7 @@ function Headlights() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:py-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Mobile · Greater Cincinnati · {HEADLIGHT_PRICE_LABEL}
+              Mobile · Greater Cincinnati + NKY · {HEADLIGHT_PRICE_LABEL}
             </p>
             <h1 className="mt-4 font-display text-3xl font-semibold uppercase leading-[1.08] tracking-wide text-fg sm:text-5xl lg:text-6xl">
               Cloudy headlights? We’ll make them clear again.
@@ -61,8 +62,8 @@ function Headlights() {
               </Link>
             </div>
             <p className="mt-5 text-sm text-muted">
-              Headlight restoration {HEADLIGHT_PRICE_LABEL}. Most visits take{" "}
-              {HEADLIGHT_DURATION}. {HOURS_DISPLAY}.
+              {HEADLIGHT_PRICE_LABEL} for both headlights. Most visits take{" "}
+              {HEADLIGHT_DURATION}. {HEADLIGHT_GUARANTEE}. {HOURS_DISPLAY}.
             </p>
           </div>
           <div className="relative">
@@ -80,7 +81,7 @@ function Headlights() {
           <Fact
             icon={<MapPin className="size-5" />}
             title="Right in your driveway"
-            body="No drop-off. No shop wait. We come to you across Greater Cincinnati."
+            body="No drop-off. No shop wait. We come to you across Greater Cincinnati and Northern Kentucky."
           />
           <Fact
             icon={<Clock className="size-5" />}
@@ -89,8 +90,8 @@ function Headlights() {
           />
           <Fact
             icon={<ShieldCheck className="size-5" />}
-            title={`${HEADLIGHT_PRICE_LABEL}. Insured.`}
-            body="Matched and sealed. Veteran owned."
+            title={HEADLIGHT_GUARANTEE}
+            body={`${HEADLIGHT_PRICE_LABEL} for both headlights. Matched, sealed, and backed. Insured. Veteran owned.`}
           />
         </div>
       </section>
@@ -112,12 +113,14 @@ function Headlights() {
             <p className="mt-4 leading-relaxed text-muted">
               Sun and weather cloud the plastic over time. That haze doesn’t
               just look tired. It cuts how far you can see after dark. We bring
-              the clarity back and seal it so it lasts.
+              the clarity back and seal it so it lasts — backed by our{" "}
+              {HEADLIGHT_GUARANTEE}.
             </p>
             <ul className="mt-6 space-y-3 text-sm">
               {[
-                `${HEADLIGHT_PRICE_LABEL}`,
+                `${HEADLIGHT_PRICE_LABEL} for both headlights`,
                 `Most visits take ${HEADLIGHT_DURATION}`,
+                HEADLIGHT_GUARANTEE,
                 "We come to your house. Insured.",
               ].map((item) => (
                 <li key={item} className="flex gap-3">
