@@ -5,6 +5,7 @@ export const HOURS_SHORT = "Mon–Sat 9–6";
 export const HEADLIGHT_PRICE = 125;
 export const HEADLIGHT_PRICE_LABEL = "$125";
 export const HEADLIGHT_DURATION = "under 30 minutes";
+export const HEADLIGHT_GUARANTEE = "3-year guarantee";
 
 export const SOCIALS = [
   {
@@ -110,8 +111,9 @@ export const PACKAGES: Record<ServiceId, ServicePackage> = {
     duration: HEADLIGHT_DURATION,
     blurb: "Cloudy to clear. Matched and sealed in your driveway.",
     includes: [
-      HEADLIGHT_PRICE_LABEL,
+      `${HEADLIGHT_PRICE_LABEL} for both headlights`,
       `Most visits take ${HEADLIGHT_DURATION}`,
+      HEADLIGHT_GUARANTEE,
       "Restore and seal the lenses",
       "Insured. We come to you.",
     ],
